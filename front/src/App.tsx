@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 
 function App() {
-  const [colorScheme, setColorScheme] = useState<string>("light");
   const [totalCards, setTotalCards] = useState<number>(0);
   const [opponentMonstersRankOrLevel, setOpponentMonstersRankOrLevel] = useState<(number | null)[]>(new Array(5).fill(null));
   const [selectedFusionLevels, setSelectedFusionLevels] = useState<number[]>([]);
@@ -109,13 +108,11 @@ function App() {
 
     const handleThemeChange = (event: MediaQueryListEvent) => {
       const newTheme = event.matches ? "dark" : "light";
-      setColorScheme(newTheme);
       document.body.setAttribute('data-theme', newTheme);
     };
 
     // Set initial theme
     const initialTheme = darkThemeQuery.matches ? "dark" : "light";
-    setColorScheme(initialTheme);
     document.body.setAttribute('data-theme', initialTheme);
 
     darkThemeQuery.addEventListener("change", handleThemeChange);
