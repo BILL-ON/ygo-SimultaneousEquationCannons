@@ -260,6 +260,22 @@ function App() {
           </table>
         </div>}
       </div>
+      <div
+        style={{
+          marginTop: "10px",
+          display: "flex",
+          justifyContent: "center",  
+          alignItems: "center",     
+          width: "100%"           
+        }}
+      >        <a href="https://github.com/BILL-ON/ygo-SimultaneousEquationCannons" target="_blank" rel="noopener noreferrer">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+            alt="Icon"
+            style={{ width: '50px', height: '50px', cursor: 'pointer' }}
+          />
+        </a>
+      </div>
     </div>
   );
 }
