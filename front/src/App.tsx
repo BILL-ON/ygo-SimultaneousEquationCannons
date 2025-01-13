@@ -7,9 +7,7 @@ function App() {
   const [opponentMonstersRankOrLevel, setOpponentMonstersRankOrLevel] = useState<(number | null)[]>(new Array(5).fill(null));
   const [selectedFusionLevels, setSelectedFusionLevels] = useState<number[]>([]);
   const [selectedXyzRanks, setSelectedXyzRanks] = useState<number[]>([]);
-  const [calculationResult, setCalculationResult] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [isToggleOn, setIsToggleOn] = useState<boolean>(false);
 
   const levels = Array.from({ length: 12 }, (_, i) => i + 1);
   const MAX_EXTRA_DECK_SIZE = 15;
@@ -88,22 +86,6 @@ function App() {
   };
 
   useEffect(() => {
-    const result = [];
-    for (const opponentMonsterRankOrLevel of opponentMonstersRankOrLevel) {
-      if (opponentMonsterRankOrLevel !== null) {
-        const data = solveCardRequirements(totalCards, opponentMonsterRankOrLevel);
-        if (data !== null) {
-          result.push(data);
-        }
-      }
-    }
-    if (result.length > 0) {
-      setCalculationResult(result);
-    }
-
-  }, [totalCards, opponentMonstersRankOrLevel, selectedFusionLevels, selectedXyzRanks]);
-
-  useEffect(() => {
     const darkThemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleThemeChange = (event: MediaQueryListEvent) => {
@@ -111,7 +93,6 @@ function App() {
       document.body.setAttribute('data-theme', newTheme);
     };
 
-    // Set initial theme
     const initialTheme = darkThemeQuery.matches ? "dark" : "light";
     document.body.setAttribute('data-theme', initialTheme);
 
@@ -193,16 +174,10 @@ function App() {
               const value = Math.max(0, Number(e.target.value));
               setTotalCards(value);
             }}
-            disabled={isToggleOn}
           />
           <div className="button-group">
-            <button onClick={() => setTotalCards((prev) => Math.max(0, prev - 1))} disabled={isToggleOn}>-</button>
-            <button onClick={() => setTotalCards((prev) => prev + 1)} disabled={isToggleOn}>+</button>
-          </div>
-          <div className="button-group">
-            <button onClick={() => setIsToggleOn((prev) => !prev)} className="toggle-possible-cards">
-              {isToggleOn ? "On" : "Off"}
-            </button>
+            <button onClick={() => setTotalCards((prev) => Math.max(0, prev - 1))} >-</button>
+            <button onClick={() => setTotalCards((prev) => prev + 1)} >+</button>
           </div>
         </div>
 
@@ -255,42 +230,29 @@ function App() {
       </div>
 
       <div className="result-section">
-        {isToggleOn ? (
-          <div className="result">
-            <h3>Possible Cards:</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Total Cards</th>
-                  <th>Xyz Rank 1</th>
-                  <th>Xyz Rank 2</th>
-                  <th>Fusion Level</th>
+        {<div className="result">
+          <h3>Possible Cards:</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Total Cards</th>
+                <th>Xyz Rank 1</th>
+                <th>Xyz Rank 2</th>
+                <th>Fusion Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {generatePossibleCards(opponentMonstersRankOrLevel).map((card, index) => (
+                <tr key={index}>
+                  <td>{card.total}</td>
+                  <td>{card.xyzRank1}</td>
+                  <td>{card.xyzRank2}</td>
+                  <td>{card.fusionLevel}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {generatePossibleCards(opponentMonstersRankOrLevel).map((card, index) => (
-                  <tr key={index}>
-                    <td>{card.total}</td>
-                    <td>{card.xyzRank1}</td>
-                    <td>{card.xyzRank2}</td>
-                    <td>{card.fusionLevel}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : calculationResult ? (
-          <div className="result">
-            <h3>Combination:</h3>
-            <p><strong>Xyz Rank 1:</strong> {calculationResult.xyzRank1}</p>
-            <p><strong>Xyz Rank 2:</strong> {calculationResult.xyzRank2}</p>
-            <p><strong>Fusion Level:</strong> {calculationResult.fusionLevel}</p>
-          </div>
-        ) : selectedFusionLevels.length === 0 || selectedXyzRanks.length === 0 ? (
-          <p className="no-selection">Please select at least one Fusion Level and one XYZ Rank.</p>
-        ) : (
-          <p className="no-result">No valid solution found with the selected parameters.</p>
-        )}
+              ))}
+            </tbody>
+          </table>
+        </div>}
       </div>
     </div>
   );
