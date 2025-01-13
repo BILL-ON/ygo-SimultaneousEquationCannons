@@ -105,6 +105,7 @@ function App() {
 
   return (
     <div className="app">
+      <meta name="google-site-verification" content="Pt0phvx3wj4niDHGzfpNI0pdtxF37rmkUmcDfLewXa0" />
       <h1 className="title">Simultaneous Equation Cannons Calculator</h1>
 
       <h2 className="section-title">Extra Deck</h2>
