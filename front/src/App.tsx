@@ -3,7 +3,7 @@ import "./App.css";
 
 
 function App() {
-  const [totalCards, setTotalCards] = useState<number>(0);
+  const [totalCards, setTotalCards] = useState<number | null>(null);
   const [opponentMonstersRankOrLevel, setOpponentMonstersRankOrLevel] = useState<(number | null)[]>(new Array(5).fill(null));
   const [selectedFusionLevels, setSelectedFusionLevels] = useState<number[]>([]);
   const [selectedXyzRanks, setSelectedXyzRanks] = useState<number[]>([]);
@@ -169,15 +169,21 @@ function App() {
           <label>Total Cards:</label>
           <input
             type="number"
-            value={totalCards}
+            value={totalCards !== null ? totalCards.toString() : ""}
             onChange={(e) => {
               const value = Math.max(0, Number(e.target.value));
               setTotalCards(value);
             }}
           />
           <div className="button-group">
-            <button onClick={() => setTotalCards((prev) => Math.max(0, prev - 1))} >-</button>
-            <button onClick={() => setTotalCards((prev) => prev + 1)} >+</button>
+            <button onClick={() => setTotalCards((prev) => {
+              if (prev == null) return null
+              return Math.max(0, prev - 1)
+            })} >-</button>
+            <button onClick={() => setTotalCards((prev) => {
+              if (prev == null) return 1
+              return prev + 1
+            })} >+</button>
           </div>
         </div>
 
